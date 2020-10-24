@@ -7,12 +7,18 @@ const sequelize = require('./config/database')
 
 
 //Test the database connection
-
 sequelize.authenticate()
 .then(() => console.log("database connection succesful"))
 .catch((err) => console.log('This was the error thrown::: ' + err))
 
 const app = express();
+
+// Adding handlebars (middleware)
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
+app.set('view engine', 'handlebars')
+
+//set static folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => res.send('INDEX'));
 

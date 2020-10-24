@@ -4,13 +4,14 @@ const db = require('../config/database')
 const gig = require('../models/gig');
 
 //get gigs list
-router.get('/', (req, res) => res.send(gig.findAll()
-    .then((gigs) => {
-        console.log(gigs)
-        res.sendStatus(200);
-    })
-    .catch((err) => console.log(err))
-));
+router.get('/', (req, res) => 
+    gig.findAll()
+        .then((gigs) => {
+            res.render('gigs', {gigs: gigs});
+        })
+        .catch((err) => console.log(err)
+    )
+);
 
 //add a gig
 router.get('/add', (req, res) => {
