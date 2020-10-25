@@ -4,8 +4,6 @@ const bodyParser = require('body-parser')
 const path = require('path')
 const sequelize = require('./config/database')
 
-
-
 //Test the database connection
 sequelize.authenticate()
 .then(() => console.log("database connection succesful"))
@@ -14,12 +12,16 @@ sequelize.authenticate()
 const app = express();
 
 // Adding handlebars (middleware)
-app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
-app.set('view engine', 'handlebars')
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
+
+//body parser
+app.use(bodyParser.urlencoded({extended: false}));
 
 //set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Index route
 app.get('/', (req, res) => res.render('index', {layout: 'landing'}));
 
 //gig routes
