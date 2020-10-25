@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router();
 const db = require('../config/database')
 const gig = require('../models/gig');
+const sequelize = require('sequelize')
+const Op = sequelize.Op;
 
 
 //get gigs list
@@ -29,7 +31,7 @@ router.post('/add', (req, res) => {
         contact_email: 'singh.yudi10@gmail.com',
     }
 
-    let {title, technologies, bugdet, description, contact_email} = req.body; //this data will be coming from the request...
+    let {title, technologies, budget, description, contact_email} = req.body; //this data will be coming from the request...
     let errors = [];
     
     //validation...
@@ -53,34 +55,41 @@ router.post('/add', (req, res) => {
             errors,
             title,
             technologies,
-            bugdet,
+            budget,
             description,
             contact_email
         });
     }else{
-
         if(!budget) {
             budget = "Unknown";
         }else {
             budget = "$" + budget;
         }
 
+        // Make lowercase and remove space after comma
         technologies = technologies.toLowerCase().replace(/, /g, ',');
-        
+
         // Insert into table
         gig.create({
             title: title,
             technologies: technologies,
-            bugdet: bugdet, 
+            budget: budget, 
             description: description,
             contact_email: contact_email
         }).then((gig) => {
             console.log("this was added::::" + gig);
-            res.redirect('/gigs')
+            res.redirect('/jobs')
         })
         .catch(err => console.log(err));
     }
+})
 
+//search jobs
+router.get('/search', (req, res) => {
+    const {term} = req.query;
+    gig.findAll({where: {technologies: {[Op.like]: '%' + term + '%'}}})
+    .then((gigs) => res.render('gigs', {gigs: gigs.map((gig) => gig.toJSON())}))
+    .catch(err => console.log(err));
 })
 
 
