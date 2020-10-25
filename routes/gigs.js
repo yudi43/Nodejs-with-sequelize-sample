@@ -23,13 +23,6 @@ router.get('/add', (req, res) => {
 
 //add a gig
 router.post('/add', (req, res) => {
-    const data = {
-        title: 'Simplr wp website',
-        technologies: 'website, js, html, css',
-        bugdet: '$2500',
-        description: 'This is some dummy text for the description of our gig and this does not make any sense, forget about it',
-        contact_email: 'singh.yudi10@gmail.com',
-    }
 
     let {title, technologies, budget, description, contact_email} = req.body; //this data will be coming from the request...
     let errors = [];
