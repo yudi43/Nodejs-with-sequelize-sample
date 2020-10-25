@@ -3,18 +3,24 @@ const router = express.Router();
 const db = require('../config/database')
 const gig = require('../models/gig');
 
+
 //get gigs list
 router.get('/', (req, res) => 
-    gig.findAll()
-        .then((gigs) => {
-            res.render('gigs', {gigs: gigs});
-        })
-        .catch((err) => console.log(err)
-    )
+gig.findAll()
+.then((gigs) => {
+    res.render('gigs', {gigs: gigs.map(gig => gig.toJSON())});
+})
+.catch((err) => console.log(err)
+)
 );
 
-//add a gig
+//display add gig form
 router.get('/add', (req, res) => {
+    res.render('add');
+});
+
+//add a gig
+router.post('/add', (req, res) => {
     const data = {
         title: 'Simplr wp website',
         technologies: 'website, js, html, css',
