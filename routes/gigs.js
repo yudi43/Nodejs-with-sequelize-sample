@@ -87,6 +87,10 @@ router.post('/add', (req, res) => {
 //search jobs
 router.get('/search', (req, res) => {
     const {term} = req.query;
+    
+    //convert to lowercase
+    term = term.toLowerCase();
+
     gig.findAll({where: {technologies: {[Op.like]: '%' + term + '%'}}})
     .then((gigs) => res.render('gigs', {gigs: gigs.map((gig) => gig.toJSON())}))
     .catch(err => console.log(err));
